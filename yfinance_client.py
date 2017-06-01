@@ -3,6 +3,7 @@
 from decimal import Decimal
 from Queue import Queue
 from threading import current_thread, Thread
+from yahoo_finance import Share
 import urllib
 import json
 
@@ -39,8 +40,7 @@ class StockQuote(object):
     
     @property
     def percent_change(self):
-        return Decimal(1.)
-        # return self.change / (self.last - self.change) * 100
+        return self.change
     
     def __repr__(self):
         return "<StockQuote('%s'): %f" % (self.ticker, self.last)
@@ -88,18 +88,19 @@ class YRequester(object):
                 for s in res['query']['results']['quote']:
                     if s['StockExchange'] is None:
                         continue
+                    share = Share(s['symbol'])
                     self.results.append(StockQuote(
                         self.ticker_map[s['symbol']],
                         s['symbol'],
                         s['Name'],
-                        _to_decimal(s['LastTradePriceOnly']),
-                        _to_decimal(s['Change']),
-                        _to_decimal(s['DaysLow']),
-                        _to_decimal(s['DaysHigh']),
-                        _to_decimal(s['YearLow']),
-                        _to_decimal(s['YearHigh']),
-                        long(s['Volume']),
-                        long(s['AverageDailyVolume']),
+                        _to_decimal(share.get_price()),
+                        _to_decimal(share.get_change()),
+                        _to_decimal(share.get_days_low()),
+                        _to_decimal(share.get_days_high()),
+                        _to_decimal(share.get_year_low()),
+                        _to_decimal(share.get_year_high()),
+                        long(share.get_volume()),
+                        long(share.get_avg_daily_volume()),
                         s['MarketCapitalization'],
                     ))
             finally:

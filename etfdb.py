@@ -6,9 +6,9 @@ from etflib import get_etf_component_quotes
 app = Flask(__name__)
 
 
-@app.route("/")
-def index():
-    return redirect(url_for('etf_page', ticker='SPY'))
+# @app.route("/")
+# def index():
+#     return redirect(url_for('etf_page', ticker='SPY'))
 
 
 @app.route("/etf/<ticker>")

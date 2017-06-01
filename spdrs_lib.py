@@ -4,8 +4,10 @@ from decimal import Decimal
 import urllib
 from xlrd import open_workbook
 
+
 class SPDRSLib(object):
-    URL = 'https://www.spdrs.com/site-content/xls/%s_All_Holdings.xls?fund=%s&docname=All+Holdings'
+    URL = 'https://www.spdrs.com/site-content/xls/%s_' \
+          'All_Holdings.xls?fund=%s&docname=All+Holdings'
 
     def __init__(self):
         pass

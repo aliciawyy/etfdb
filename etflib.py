@@ -17,7 +17,7 @@ def get_etf_client_lib(ticker):
         return SPDRSLib
     elif 'Vanguard' in family:
         return VanguardLib
-    raise Exception("Don't know how to deal with '%s' ETF" % family)
+    raise NotImplementedError("Don't know how to deal with '%s' ETF" % family)
 
 
 def get_etf_component_quotes(ticker):

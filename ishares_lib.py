@@ -4,8 +4,10 @@ from decimal import Decimal
 import urllib
 from bs4 import BeautifulSoup
 
+
 class ISharesLib(object):
-    ROOT_URL = 'http://us.ishares.com/product_info/fund/holdings/%s.htm?periodCd=d'
+    ROOT_URL = 'http://us.ishares.com/product_info/fund/holdings/' \
+               '%s.htm?periodCd=d'
 
     def __init__(self):
         pass
