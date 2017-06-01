@@ -10,6 +10,14 @@ __all__ = ['get_quotes', 'StockQuote']
 
 NUM_SIMULTANEOUS_REQUESTS = 3
 
+
+def _to_decimal(s):
+    try:
+        Decimal(s)
+    except TypeError:
+        return Decimal(0.)
+
+
 class StockQuote(object):
     def __init__(
         self, original_ticker, ticker, name, last, change,
@@ -31,10 +39,12 @@ class StockQuote(object):
     
     @property
     def percent_change(self):
-        return self.change / (self.last - self.change) * 100
+        return Decimal(1.)
+        # return self.change / (self.last - self.change) * 100
     
     def __repr__(self):
         return "<StockQuote('%s'): %f" % (self.ticker, self.last)
+
 
 class YRequester(object):
     ROOT_URL = 'http://query.yahooapis.com/v1/public/yql'
@@ -82,12 +92,12 @@ class YRequester(object):
                         self.ticker_map[s['symbol']],
                         s['symbol'],
                         s['Name'],
-                        Decimal(s['LastTradePriceOnly']),
-                        Decimal(s['Change']),
-                        Decimal(s['DaysLow']),
-                        Decimal(s['DaysHigh']),
-                        Decimal(s['YearLow']),
-                        Decimal(s['YearHigh']),
+                        _to_decimal(s['LastTradePriceOnly']),
+                        _to_decimal(s['Change']),
+                        _to_decimal(s['DaysLow']),
+                        _to_decimal(s['DaysHigh']),
+                        _to_decimal(s['YearLow']),
+                        _to_decimal(s['YearHigh']),
                         long(s['Volume']),
                         long(s['AverageDailyVolume']),
                         s['MarketCapitalization'],
@@ -106,6 +116,7 @@ class YRequester(object):
         for q in self.results:
             out[q.original_ticker] = q
         return out
+
 
 def get_quotes(tickers):
     return YRequester(tickers).get_quotes()
